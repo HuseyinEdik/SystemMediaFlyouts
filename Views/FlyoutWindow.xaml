@@ -1,0 +1,33 @@
+﻿<Window x:Class="SystemMediaFlyouts.Views.FlyoutWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:local="clr-namespace:SystemMediaFlyouts.Views"
+                 WindowStyle="None"
+                 AllowsTransparency="True"
+                 Background="Transparent"
+                 ShowInTaskbar="False"
+                 Topmost="True"
+                 SizeToContent="Height"
+                 Width="320">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Border CornerRadius="12" 
+            Background="{ui:ThemeResource ApplicationBackgroundBrush}" 
+            BorderBrush="{ui:ThemeResource ControlElevationBorderBrush}" 
+            BorderThickness="1" 
+            Padding="20">
+
+        <StackPanel>
+            <local:MediaUserControl Visibility="{Binding IsMediaModuleEnabled, Converter={StaticResource BoolToVis}}" />
+
+            <local:VolumeUserControl Visibility="{Binding IsVolumeModuleEnabled, Converter={StaticResource BoolToVis}}" />
+
+            <local:BrightnessUserControl Visibility="{Binding IsBrightnessModuleEnabled, Converter={StaticResource BoolToVis}}" />
+        </StackPanel>
+
+    </Border>
+</Window>

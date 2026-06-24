@@ -1,0 +1,103 @@
+﻿<ui:FluentWindow x:Class="SystemMediaFlyouts.Views.SettingsWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Ayarlar" Height="550" Width="450"
+                 WindowStartupLocation="CenterScreen"
+                 ResizeMode="NoResize"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="System Media Flyouts" />
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+
+            <StackPanel Margin="20,0,20,20">
+
+                <TextBlock Text="Görünüm ve Konum" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+                <ui:CardControl Margin="0,0,0,8">
+                    <ui:CardControl.Header>
+                        <StackPanel>
+                            <TextBlock Text="Uygulama Teması" FontWeight="Medium"/>
+                            <TextBlock Text="Açık, Koyu veya Sistem temasını seçin." FontSize="12" Opacity="0.7"/>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ComboBox ItemsSource="{Binding AvailableThemes}" SelectedItem="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,25">
+                    <ui:CardControl.Header>
+                        <StackPanel>
+                            <TextBlock Text="Panel Konumu" FontWeight="Medium"/>
+                            <TextBlock Text="Gösterge panelinin ekranda çıkacağı köşeyi belirleyin." FontSize="12" Opacity="0.7"/>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ComboBox ItemsSource="{Binding AvailablePositions}" SelectedItem="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,25">
+                    <ui:CardControl.Header>
+                        <StackPanel>
+                            <TextBlock Text="Gösterim Süresi" FontWeight="Medium"/>
+                            <TextBlock Text="Panelin ekranda kalacağı süre (saniye)" FontSize="12" Opacity="0.7"/>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Slider Minimum="1" Maximum="10" Value="{Binding DisplayDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding DisplayDuration}" VerticalAlignment="Center" FontWeight="SemiBold" Width="15"/>
+                        <TextBlock Text="sn" VerticalAlignment="Center" Opacity="0.7"/>
+                    </StackPanel>
+                </ui:CardControl>
+
+                <TextBlock Text="Modül Görünürlüğü (Lego)" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+                <ui:CardControl Margin="0,0,0,8">
+                    <ui:CardControl.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Play24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Medya Modülü" FontWeight="Medium"/>
+                                <TextBlock Text="Şarkı bilgisi ve kontrolleri göster" FontSize="12" Opacity="0.7"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ui:ToggleSwitch IsChecked="{Binding IsMediaModuleEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,8">
+                    <ui:CardControl.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Speaker224" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Ses Modülü" FontWeight="Medium"/>
+                                <TextBlock Text="Sistem ses seviyesi kontrolünü göster" FontSize="12" Opacity="0.7"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ui:ToggleSwitch IsChecked="{Binding IsVolumeModuleEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,8">
+                    <ui:CardControl.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="BrightnessHigh24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Parlaklık Modülü" FontWeight="Medium"/>
+                                <TextBlock Text="Ekran parlaklığı kontrolünü göster" FontSize="12" Opacity="0.7"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ui:ToggleSwitch IsChecked="{Binding IsBrightnessModuleEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </ui:CardControl>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</ui:FluentWindow>
