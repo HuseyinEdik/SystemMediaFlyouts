@@ -13,7 +13,8 @@ namespace SystemMediaFlyouts.Core
         IRecipient<SettingsChangedMessage>,
         IRecipient<VolumeChangedMessage>,
         IRecipient<BrightnessChangedMessage>,
-        IRecipient<MediaChangedMessage>
+        IRecipient<MediaChangedMessage>,
+        IRecipient<SettingsOpenedMessage> // YENİ EKLENDİ
     {
         private Window? _flyoutWindow;
         private readonly DispatcherTimer _hideTimer;
@@ -44,6 +45,15 @@ namespace SystemMediaFlyouts.Core
             // Kullanıcı mouse ile panelin üzerindeyse gizlemeyi iptal et
             if (_flyoutWindow.IsMouseOver) return;
 
+            // 2. YENİ: Ayarlar penceresi ekranda görünür durumdaysa gizlemeyi iptal et
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType().Name == "SettingsWindow" && window.IsVisible)
+                {
+                    return; // Ayarlar açıksa timer çalışmaya devam eder ama paneli gizlemez
+                }
+            }
+
             _flyoutWindow.Hide();
             _hideTimer.Stop();
         }
@@ -71,6 +81,9 @@ namespace SystemMediaFlyouts.Core
         public void Receive(BrightnessChangedMessage message) => ShowPanel();
         public void Receive(MediaChangedMessage message) => ShowPanel();
 
+        // YENİ EKLENDİ: Ayarlar açıldığı an paneli göster!
+        public void Receive(SettingsOpenedMessage message) => ShowPanel();
+
         // --- AYAR DEĞİŞİM MESAJI ---
         public void Receive(SettingsChangedMessage message)
         {
@@ -84,6 +97,8 @@ namespace SystemMediaFlyouts.Core
                 UpdateWindowPosition(message.Value.Position);
                 UpdateTheme(message.Value.Theme);
             });
+
+            ShowPanel();
         }
 
         // --- TEMA VE KONUM METOTLARI (Senin Kodların) ---

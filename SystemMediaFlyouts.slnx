@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="../SystemMediaFlyouts.Setup/SystemMediaFlyouts.Setup.vdproj" Type="Installer" />
+  <Project Path="../SystemMediaFlyouts.Setup/SystemMediaFlyouts.Setup.vdproj" Type="Installer">
+    <Build />
+  </Project>
   <Project Path="SystemMediaFlyouts.csproj" />
 </Solution>

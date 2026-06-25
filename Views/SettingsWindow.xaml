@@ -29,7 +29,11 @@
                             <TextBlock Text="Açık, Koyu veya Sistem temasını seçin." FontSize="12" Opacity="0.7"/>
                         </StackPanel>
                     </ui:CardControl.Header>
-                    <ComboBox ItemsSource="{Binding AvailableThemes}" SelectedItem="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                    <ComboBox ItemsSource="{Binding AvailableThemes}" 
+                              DisplayMemberPath="Value" 
+                              SelectedValuePath="Key" 
+                              SelectedValue="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              Width="150"/>
                 </ui:CardControl>
 
                 <ui:CardControl Margin="0,0,0,25">
@@ -39,7 +43,11 @@
                             <TextBlock Text="Gösterge panelinin ekranda çıkacağı köşeyi belirleyin." FontSize="12" Opacity="0.7"/>
                         </StackPanel>
                     </ui:CardControl.Header>
-                    <ComboBox ItemsSource="{Binding AvailablePositions}" SelectedItem="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                    <ComboBox ItemsSource="{Binding AvailablePositions}" 
+                              DisplayMemberPath="Value" 
+                              SelectedValuePath="Key" 
+                              SelectedValue="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              Width="150"/>
                 </ui:CardControl>
 
                 <ui:CardControl Margin="0,0,0,25">
@@ -56,7 +64,7 @@
                     </StackPanel>
                 </ui:CardControl>
 
-                <TextBlock Text="Modül Görünürlüğü (Lego)" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                <TextBlock Text="Modül Görünürlüğü" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
 
                 <ui:CardControl Margin="0,0,0,8">
                     <ui:CardControl.Header>

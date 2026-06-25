@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SystemMediaFlyouts.Messages;
 using Wpf.Ui.Controls;
 
 namespace SystemMediaFlyouts.Views
@@ -23,6 +25,16 @@ namespace SystemMediaFlyouts.Views
         public SettingsWindow()
         {
             InitializeComponent();
+
+            // Pencerenin görünürlüğü her değiştiğinde tetiklenir
+            this.IsVisibleChanged += (s, e) =>
+            {
+                if (this.IsVisible) // Eğer pencere görünür hale geldiyse
+                {
+                    // Medya panelini uyandırmak için sisteme mesaj yolla
+                    WeakReferenceMessenger.Default.Send(new SettingsOpenedMessage());
+                }
+            };
         }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {

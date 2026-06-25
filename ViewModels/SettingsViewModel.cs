@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
 using SystemMediaFlyouts.Models;
 using SystemMediaFlyouts.Services;
 
@@ -10,9 +11,22 @@ namespace SystemMediaFlyouts.ViewModels
         private readonly SettingsService _settingsService;
         private bool _isInitializing = true; // Yeni Kilit Değişkeni
 
-        // ComboBox'lar için Enum listeleri
-        public Array AvailableThemes => Enum.GetValues(typeof(AppTheme));
-        public Array AvailablePositions => Enum.GetValues(typeof(FlyoutPosition));
+        public Dictionary<AppTheme, string> AvailableThemes { get; } = new Dictionary<AppTheme, string>
+        {
+            { AppTheme.System, "Sistem Teması" },
+            { AppTheme.Light, "Açık Tema" },
+            { AppTheme.Dark, "Koyu Tema" }
+        };
+
+        public Dictionary<FlyoutPosition, string> AvailablePositions { get; } = new Dictionary<FlyoutPosition, string>
+        {
+            { FlyoutPosition.TopLeft, "Sol Üst" },
+            { FlyoutPosition.TopCenter, "Üst Orta" },
+            { FlyoutPosition.TopRight, "Sağ Üst" },
+            { FlyoutPosition.BottomLeft, "Sol Alt" },
+            { FlyoutPosition.BottomCenter, "Alt Orta" },
+            { FlyoutPosition.BottomRight, "Sağ Alt" }
+        };
 
         // MVVM Toolkit arka planda Public özelliklerini otomatik üretecek
         [ObservableProperty] private AppTheme _theme;
@@ -20,6 +34,7 @@ namespace SystemMediaFlyouts.ViewModels
         [ObservableProperty] private bool _isMediaModuleEnabled;
         [ObservableProperty] private bool _isVolumeModuleEnabled;
         [ObservableProperty] private bool _isBrightnessModuleEnabled;
+
         private int _displayDuration;
         public int DisplayDuration
         {
