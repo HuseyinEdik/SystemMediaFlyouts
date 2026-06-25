@@ -14,7 +14,7 @@ namespace SystemMediaFlyouts.Services
     {
         private MMDevice? _audioDevice;
         private GlobalSystemMediaTransportControlsSessionManager? _mediaManager;
-        private System.Timers.Timer _progressTimer; // Yeni eklendi
+        private System.Timers.Timer? _progressTimer; // Yeni eklendi
 
         public async Task InitializeAsync()
         {
