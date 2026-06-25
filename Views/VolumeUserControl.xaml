@@ -17,6 +17,7 @@
                 VerticalAlignment="Center" Margin="10,0,10,0"/>
 
         <TextBlock Grid.Column="2" Text="{Binding CurrentVolume}" 
-                   VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14"/>
+                   Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
+                   VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
     </Grid>
 </UserControl>

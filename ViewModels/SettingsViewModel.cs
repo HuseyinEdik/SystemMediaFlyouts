@@ -1,15 +1,62 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 using SystemMediaFlyouts.Models;
 using SystemMediaFlyouts.Services;
+using System.Reflection;
 
 namespace SystemMediaFlyouts.ViewModels
 {
     public partial class SettingsViewModel : ObservableObject
     {
         private readonly SettingsService _settingsService;
-        private bool _isInitializing = true; // Yeni Kilit Değişkeni
+        private bool _isInitializing = true;
+
+        // ----- YENİ EKLENEN SAYFA VE MENÜ YÖNETİMİ -----
+        [ObservableProperty]
+        private string _currentPage = "Appearance"; // Varsayılan açılış sayfası
+
+        // Otomatik sürüm numarasını çeken özellik
+        public string AppVersion => $"Versiyon {Assembly.GetExecutingAssembly().GetName().Version}";
+
+        [RelayCommand]
+        private void Navigate(string pageName)
+        {
+            CurrentPage = pageName;
+        }
+
+        //Github sayfası yönlendirmesi
+        [RelayCommand]
+        private void OpenGitHub()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/HuseyinEdik/SystemMediaFlyouts",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
+        }
+
+        //Github Hatalar sayfası yönlendirme 
+        [RelayCommand]
+        private void OpenGitHubIssues()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                { 
+                    FileName = "https://github.com/HuseyinEdik/SystemMediaFlyouts/issues",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
+        }
+        // -----------------------------------------------
 
         public Dictionary<AppTheme, string> AvailableThemes { get; } = new Dictionary<AppTheme, string>
         {
@@ -28,7 +75,6 @@ namespace SystemMediaFlyouts.ViewModels
             { FlyoutPosition.BottomRight, "Sağ Alt" }
         };
 
-        // MVVM Toolkit arka planda Public özelliklerini otomatik üretecek
         [ObservableProperty] private AppTheme _theme;
         [ObservableProperty] private FlyoutPosition _position;
         [ObservableProperty] private bool _isMediaModuleEnabled;
@@ -47,7 +93,6 @@ namespace SystemMediaFlyouts.ViewModels
             _settingsService = settingsService;
             var current = _settingsService.CurrentSettings;
 
-            // Alt tireli field'lar yerine doğrudan özellikleri tetikliyoruz ki UI uyansın
             Theme = current.Theme;
             Position = current.Position;
             IsMediaModuleEnabled = current.IsMediaModuleEnabled;
@@ -55,12 +100,9 @@ namespace SystemMediaFlyouts.ViewModels
             IsBrightnessModuleEnabled = current.IsBrightnessModuleEnabled;
             DisplayDuration = current.DisplayDuration;
 
-
-
-            _isInitializing = false; // Kilit açıldı, artık kullanıcı değiştirirse kaydolacak
+            _isInitializing = false;
         }
 
-        // Özellikler değiştiği AN tetiklenen otomatik metotlar (XAML'daki UpdateSourceTrigger=PropertyChanged sayesinde anında çalışır)
         partial void OnThemeChanged(AppTheme value) => SaveAndBroadcast();
         partial void OnPositionChanged(FlyoutPosition value) => SaveAndBroadcast();
         partial void OnIsMediaModuleEnabledChanged(bool value) => SaveAndBroadcast();
@@ -69,7 +111,7 @@ namespace SystemMediaFlyouts.ViewModels
 
         private void SaveAndBroadcast()
         {
-            if (_isInitializing) return; // Başlangıç aşamasındaysa kaydetmeyi engelle
+            if (_isInitializing) return;
 
             var updatedSettings = new AppSettings
             {
