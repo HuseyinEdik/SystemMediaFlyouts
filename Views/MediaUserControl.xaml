@@ -13,17 +13,22 @@
         </Border>
 
         <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
-            <TextBlock Text="{Binding MediaTitle}" FontWeight="Bold" FontSize="14" TextTrimming="CharacterEllipsis"/>
-            <TextBlock Text="{Binding MediaArtist}" Opacity="0.7" FontSize="12" Margin="0,2,0,8" TextTrimming="CharacterEllipsis"/>
+            <TextBlock Text="{Binding MediaTitle}" 
+                       Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" 
+                       FontWeight="Bold" FontSize="14" TextTrimming="CharacterEllipsis"/>
+
+            <TextBlock Text="{Binding MediaArtist}" 
+                       Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" 
+                       FontSize="12" Margin="0,2,0,8" TextTrimming="CharacterEllipsis"/>
 
             <ProgressBar Value="{Binding MediaProgress}" Maximum="100" Height="4" Margin="0,0,0,10" Foreground="{ui:ThemeResource SystemAccentColorPrimaryBrush}"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <ui:Button Command="{Binding SkipPreviousCommand}" Icon="{ui:SymbolIcon Previous24}" Appearance="Transparent" Margin="0,0,5,0"/>
+                <ui:Button Command="{Binding SkipPreviousCommand}" Icon="{ui:SymbolIcon Previous24}" Appearance="Secondary" Margin="0,0,5,0"/>
 
                 <ui:Button Command="{Binding TogglePlayPauseCommand}" Icon="{ui:SymbolIcon Play24}" Appearance="Primary" Margin="0,0,5,0"/>
 
-                <ui:Button Command="{Binding SkipNextCommand}" Icon="{ui:SymbolIcon Next24}" Appearance="Transparent"/>
+                <ui:Button Command="{Binding SkipNextCommand}" Icon="{ui:SymbolIcon Next24}" Appearance="Secondary"/>
             </StackPanel>
         </StackPanel>
     </Grid>

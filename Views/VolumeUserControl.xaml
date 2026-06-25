@@ -4,15 +4,19 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <Grid Margin="0,5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
 
-        <ui:SymbolIcon Symbol="Speaker224" FontSize="20" Grid.Column="0" Margin="0,0,15,0"/>
+        <TextBlock Grid.Column="0" Text="&#xE767;" FontFamily="Segoe Fluent Icons" FontSize="20" 
+                   Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CurrentVolume, Mode=TwoWay}" VerticalAlignment="Center"/>
+        <Slider Grid.Column="1" Value="{Binding CurrentVolume}" Maximum="100" 
+                VerticalAlignment="Center" Margin="10,0,10,0"/>
 
-        <TextBlock Grid.Column="2" Text="{Binding CurrentVolume}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold"/>
+        <TextBlock Grid.Column="2" Text="{Binding CurrentVolume}" 
+                   VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14"/>
     </Grid>
 </UserControl>
