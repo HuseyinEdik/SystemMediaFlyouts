@@ -33,7 +33,12 @@
                     <TextBlock Grid.Row="0" Text="Ayarlar" FontSize="14" FontWeight="SemiBold" Margin="10,0,0,15" Opacity="0.7"/>
 
                     <StackPanel Grid.Row="1">
-                        <ui:Button Content="Görünüm ve Konum" 
+                        <ui:Button Content="Genel" 
+                                   Command="{Binding NavigateCommand}" CommandParameter="General"
+                                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,5"
+                                   Appearance="Transparent"/>
+
+                        <ui:Button Content="Görünüm ve Konum"
                                    Command="{Binding NavigateCommand}" CommandParameter="Appearance"
                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,5"
                                    Appearance="Transparent"/>
@@ -53,6 +58,35 @@
 
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
                 <Grid Margin="25,15,25,25">
+
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentPage}" Value="General">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+
+                        <TextBlock Text="Genel Ayarlar" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+                        <TextBlock Text="Sistem" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10" Opacity="0.6"/>
+                        <ui:CardControl Margin="0,0,0,8">
+                            <ui:CardControl.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Symbol="Power24" FontSize="20" Margin="0,0,10,0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Başlangıçta Çalıştır" FontWeight="Medium"/>
+                                        <TextBlock Text="Windows açıldığında uygulama arka planda otomatik başlasın" FontSize="12" Opacity="0.7"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ui:CardControl.Header>
+                            <ui:ToggleSwitch IsChecked="{Binding IsRunAtStartupEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </ui:CardControl>
+                    </StackPanel>
 
                     <StackPanel>
                         <StackPanel.Style>
@@ -128,6 +162,19 @@
                         <ui:CardControl Margin="0,0,0,8">
                             <ui:CardControl.Header>
                                 <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Symbol="Settings24" Margin="0,0,10,0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Kontrol Çubuğu Modülü" FontWeight="Medium"/>
+                                        <TextBlock Text="Panelin üstündeki sabitleme, ayarlar ve kapatma butonlarını göster" FontSize="12" Opacity="0.7"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ui:CardControl.Header>
+                            <ui:ToggleSwitch IsChecked="{Binding IsControlBarEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </ui:CardControl>
+                        
+                        <ui:CardControl Margin="0,0,0,8">
+                            <ui:CardControl.Header>
+                                <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="Play24" Margin="0,0,10,0"/>
                                     <StackPanel>
                                         <TextBlock Text="Medya Modülü" FontWeight="Medium"/>
@@ -199,12 +246,9 @@
                                 BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}" 
                                 BorderThickness="1" CornerRadius="8" Padding="20">
                             <StackPanel>
-
                                 <TextBlock Text="Hataları Bize Bildirin" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
-
                                 <TextBlock Text="Uygulamayı kullanırken can sıkıcı bir hatayla mı karşılaştınız veya harika bir özellik fikriniz mi var? Geliştirmemize yardımcı olmak için lütfen GitHub üzerinden bir kayıt oluşturun." 
                                            TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,20" Opacity="0.8"/>
-
                                 <ui:Button Content="Hata Bildir" Icon="{ui:SymbolIcon Open24}" 
                                            Appearance="Primary" Command="{Binding OpenGitHubIssuesCommand}" 
                                            HorizontalAlignment="Left" Padding="15,6"/>

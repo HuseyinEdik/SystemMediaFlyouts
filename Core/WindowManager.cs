@@ -42,10 +42,18 @@ namespace SystemMediaFlyouts.Core
         {
             if (_flyoutWindow == null) return;
 
-            // Kullanıcı mouse ile panelin üzerindeyse gizlemeyi iptal et
+            // 1. Kullanıcı mouse ile panelin üzerindeyse gizlemeyi iptal et
             if (_flyoutWindow.IsMouseOver) return;
 
-            // 2. YENİ: Ayarlar penceresi ekranda görünür durumdaysa gizlemeyi iptal et
+            // =================================================================
+            // YENİ EKLENDİ: Paneli Sabitle (Pin) özelliği açıksa gizlemeyi iptal et!
+            // =================================================================
+            if (_flyoutWindow.DataContext is SystemMediaFlyouts.ViewModels.MainViewModel vm && vm.IsPinned)
+            {
+                return; // Raptiye basılıysa timer hiçbir şey yapmadan geri döner (Panel ekranda kalır)
+            }
+
+            // 2. Ayarlar penceresi ekranda görünür durumdaysa gizlemeyi iptal et
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType().Name == "SettingsWindow" && window.IsVisible)

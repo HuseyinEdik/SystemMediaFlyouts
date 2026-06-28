@@ -26,6 +26,7 @@ namespace SystemMediaFlyouts.Models
         public FlyoutPosition Position { get; set; } = FlyoutPosition.TopCenter;
 
         // Modül Görünürlük Ayarları (Lego yapısı için)
+        public bool IsControlBarEnabled { get; set; } = true; 
         public bool IsMediaModuleEnabled { get; set; } = true;
         public bool IsVolumeModuleEnabled { get; set; } = true;
         public bool IsBrightnessModuleEnabled { get; set; } = true;

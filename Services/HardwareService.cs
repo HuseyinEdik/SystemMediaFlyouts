@@ -16,6 +16,7 @@ namespace SystemMediaFlyouts.Services
         private GlobalSystemMediaTransportControlsSessionManager? _mediaManager;
         private System.Timers.Timer? _progressTimer; // Yeni eklendi
 
+
         public async Task InitializeAsync()
         {
             InitAudio();
@@ -99,6 +100,8 @@ namespace SystemMediaFlyouts.Services
         }
 
         #region 3. MEDYA YÖNETİMİ (GSMTC)
+        private GlobalSystemMediaTransportControlsSession? _currentSession; // Aktif seansı takip etmek için eklendi
+
         private async Task InitMediaAsync()
         {
             try
@@ -110,7 +113,8 @@ namespace SystemMediaFlyouts.Services
                 _mediaManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
                 _mediaManager.CurrentSessionChanged += OnMediaSessionChanged;
 
-                UpdateMediaState(_mediaManager.GetCurrentSession());
+                // EN ÖNEMLİ DÜZELTME: Uygulama açıldığındaki ilk seansı sisteme "bağla"
+                SwitchMediaSession(_mediaManager.GetCurrentSession());
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Media Init Hatası: {ex.Message}"); }
         }
@@ -131,14 +135,12 @@ namespace SystemMediaFlyouts.Services
                 {
                     TimeSpan currentPosition = timeline.Position;
 
-                    // Windows'un 5 saniyelik gecikmesini "Tahmin (Interpolation)" ile dolduruyoruz
                     if (isPlaying)
                     {
                         TimeSpan timeSinceLastUpdate = DateTimeOffset.Now - timeline.LastUpdatedTime;
                         currentPosition += timeSinceLastUpdate;
                     }
 
-                    // Şarkı süresini aşmaması veya sıfırın altına düşmemesi için sınırlandırıyoruz (Clamp)
                     if (currentPosition > timeline.EndTime) currentPosition = timeline.EndTime;
                     if (currentPosition < TimeSpan.Zero) currentPosition = TimeSpan.Zero;
 
@@ -149,15 +151,45 @@ namespace SystemMediaFlyouts.Services
             catch { /* Okuma hatasını yoksay */ }
         }
 
+        // Uygulama değişirse (Örn: Spotify'dan Chrome'a) çalışır
         private void OnMediaSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args)
         {
-            var session = sender.GetCurrentSession();
-            if (session != null)
+            SwitchMediaSession(sender.GetCurrentSession());
+        }
+
+        // YENİ METOT: Şarkı değişikliklerini doğru dinlemek ve hafıza kaçağını önlemek için
+        private void SwitchMediaSession(GlobalSystemMediaTransportControlsSession? newSession)
+        {
+            // Eski seans varsa bağlantılarını kopar ki eski şarkılar takılı kalmasın
+            if (_currentSession != null)
             {
-                session.MediaPropertiesChanged += (s, e) => UpdateMediaState(s);
-                session.PlaybackInfoChanged += (s, e) => UpdateMediaState(s);
+                _currentSession.MediaPropertiesChanged -= OnMediaPropertiesChanged;
+                _currentSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
             }
-            UpdateMediaState(session);
+
+            _currentSession = newSession;
+
+            // Yeni seansa bağlan (Şarkı değiştiğinde haber verecek kısım)
+            if (_currentSession != null)
+            {
+                _currentSession.MediaPropertiesChanged += OnMediaPropertiesChanged;
+                _currentSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
+            }
+
+            // İlk verileri ekrana gönder
+            UpdateMediaState(_currentSession);
+        }
+
+        // Şarkı, sanatçı veya resim değiştiğinde otomatik tetiklenir
+        private void OnMediaPropertiesChanged(GlobalSystemMediaTransportControlsSession sender, MediaPropertiesChangedEventArgs args)
+        {
+            UpdateMediaState(sender);
+        }
+
+        // Duraklat/Oynat yapıldığında otomatik tetiklenir
+        private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession sender, PlaybackInfoChangedEventArgs args)
+        {
+            UpdateMediaState(sender);
         }
 
         private async void UpdateMediaState(GlobalSystemMediaTransportControlsSession? session)
@@ -217,6 +249,12 @@ namespace SystemMediaFlyouts.Services
         {
             var session = _mediaManager?.GetCurrentSession();
             if (session != null) await session.TrySkipPreviousAsync();
+        }
+
+        // MainViewModel'in aradığı açık bağlantı
+        public GlobalSystemMediaTransportControlsSession? GetCurrentSession()
+        {
+            return _mediaManager?.GetCurrentSession();
         }
         #endregion
     }
