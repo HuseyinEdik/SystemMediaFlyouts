@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using System.Windows;
 using SystemMediaFlyouts.Core;
+using SystemMediaFlyouts.Messages;
 using SystemMediaFlyouts.Services;
 using SystemMediaFlyouts.ViewModels;
 using SystemMediaFlyouts.Views;
@@ -19,6 +20,9 @@ namespace SystemMediaFlyouts
         private Views.SettingsWindow? _settingsWindow;
         public new static App Current => (App)Application.Current;
         public IServiceProvider Services { get; }
+
+        private static string GetLocalizedString(string key, string fallback) =>
+            Current.TryFindResource(key) as string ?? fallback;
 
         public App()
         {
@@ -70,8 +74,12 @@ namespace SystemMediaFlyouts
             // İlk konumu ayarlamak için manuel tetikleme
             var currentSettings = Services.GetRequiredService<Services.SettingsService>().CurrentSettings;
             windowManager.UpdateWindowPosition(currentSettings.Position);
+
             // TEMAYI UYGULA
             windowManager.UpdateTheme(currentSettings.Theme);
+
+            // BAŞLANGIÇTA KAYITLI DİLİ YÜKLE
+            ViewModels.SettingsViewModel.ApplyLanguage(currentSettings.Language);
 
             // 3. Donanım Servisini Başlat (Eski tanımlamalar silindi, sadece bu kalmalı)
             var hardwareService = Services.GetRequiredService<HardwareService>();
@@ -89,7 +97,7 @@ namespace SystemMediaFlyouts
                 // Dışarıdan resim istemez, uygulamanın kendi exe ikonunu otomatik çeker
                 Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 Visible = true,
-                Text = "System Media Flyouts"
+                Text = GetLocalizedString("Lang_AppName", "System Media Flyouts")
             };
 
             // Çift tıklayınca ayarları aç
@@ -101,13 +109,16 @@ namespace SystemMediaFlyouts
 
             // Sağ Tık Menüsü Oluştur
             var contextMenu = new System.Windows.Forms.ContextMenuStrip();
-            contextMenu.Items.Add("Ayarlar", null, (s, args) => { _settingsWindow.Show(); _settingsWindow.Activate(); });
-            contextMenu.Items.Add("Çıkış", null, (s, args) =>
+            contextMenu.Items.Add(GetLocalizedString("Lang_MenuHeader", "Settings"), null, (s, args) => { _settingsWindow.Show(); _settingsWindow.Activate(); });
+            contextMenu.Items.Add(GetLocalizedString("Lang_MenuExit", "Exit"), null, (s, args) =>
             {
                 _notifyIcon.Visible = false; // Çıkarken ikonu temizle
                 Current.Shutdown();
             });
             _notifyIcon.ContextMenuStrip = contextMenu;
+
+            // Uygulama açıldığında paneli bir kez göster ki ilk durumda görünür olsun
+            windowManager.Receive(new SettingsOpenedMessage());
         }
 
     

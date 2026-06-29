@@ -1,0 +1,65 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="Lang_AppName">System Media Flyouts</system:String>
+    <system:String x:Key="Lang_SettingsWindowTitle">System Media Flyouts Ayarları</system:String>
+    <system:String x:Key="Lang_MenuHeader">Ayarlar</system:String>
+
+    <system:String x:Key="Lang_MenuGeneral">Genel</system:String>
+    <system:String x:Key="Lang_MenuAppearance">Görünüm</system:String>
+    <system:String x:Key="Lang_MenuVisibility">Modül Görünürlüğü</system:String>
+    <system:String x:Key="Lang_MenuAbout">Hakkında</system:String>
+    <system:String x:Key="Lang_MenuExit">Çıkış</system:String>
+
+    <system:String x:Key="Lang_GeneralTitle">Genel Ayarlar</system:String>
+    <system:String x:Key="Lang_SystemSection">Sistem</system:String>
+    <system:String x:Key="Lang_RunAtStartup">Başlangıçta Çalıştır</system:String>
+    <system:String x:Key="Lang_RunAtStartupDesc">Windows açıldığında uygulama arka planda otomatik başlasın</system:String>
+    <system:String x:Key="Lang_AppLanguage">Uygulama Dili</system:String>
+    <system:String x:Key="Lang_AppLanguageDesc">Arayüz dilini seçin</system:String>
+    <system:String x:Key="Lang_PanelPosition">Panel Konumu</system:String>
+    <system:String x:Key="Lang_PanelPositionDesc">Gösterge panelinin ekranda çıkacağı köşeyi belirleyin.</system:String>
+
+    <system:String x:Key="Lang_AppearanceTitle">Görünüm ve Konum</system:String>
+    <system:String x:Key="Lang_AppTheme">Uygulama Teması</system:String>
+    <system:String x:Key="Lang_AppThemeDesc">Açık, Koyu veya Sistem temasını seçin.</system:String>
+    <system:String x:Key="Lang_ThemeLight">Açık Tema</system:String>
+    <system:String x:Key="Lang_ThemeDark">Koyu Tema</system:String>
+    <system:String x:Key="Lang_ThemeSystem">Sistem Teması</system:String>
+    <system:String x:Key="Lang_PanelScale">Panel Boyutu</system:String>
+    <system:String x:Key="Lang_PanelScaleDesc">Medya panelinin genel büyüklüğünü ayarla</system:String>
+    <system:String x:Key="Lang_DisplayDuration">Gösterim Süresi</system:String>
+    <system:String x:Key="Lang_DisplayDurationDesc">Panelin ekranda kalacağı süre</system:String>
+    <system:String x:Key="Lang_SecondsSuffix">sn</system:String>
+
+    <system:String x:Key="Lang_VisibilityTitle">Modül Görünürlüğü</system:String>
+    <system:String x:Key="Lang_ControlBarModule">Kontrol Çubuğu Modülü</system:String>
+    <system:String x:Key="Lang_ControlBarModuleDesc">Panelin üstündeki sabitleme, ayarlar ve kapatma butonlarını göster</system:String>
+    <system:String x:Key="Lang_PosTopLeft">Sol Üst</system:String>
+    <system:String x:Key="Lang_PosTopCenter">Üst Orta</system:String>
+    <system:String x:Key="Lang_PosTopRight">Sağ Üst</system:String>
+    <system:String x:Key="Lang_PosBottomLeft">Sol Alt</system:String>
+    <system:String x:Key="Lang_PosBottomCenter">Alt Orta</system:String>
+    <system:String x:Key="Lang_PosBottomRight">Sağ Alt</system:String>
+    <system:String x:Key="Lang_MediaModule">Medya Modülü</system:String>
+    <system:String x:Key="Lang_MediaModuleDesc">Şarkı bilgisi ve kontrolleri göster</system:String>
+    <system:String x:Key="Lang_VolumeModule">Ses Modülü</system:String>
+    <system:String x:Key="Lang_VolumeModuleDesc">Sistem ses seviyesi kontrolünü göster</system:String>
+    <system:String x:Key="Lang_BrightnessModule">Parlaklık Modülü</system:String>
+    <system:String x:Key="Lang_BrightnessModuleDesc">Ekran parlaklığı kontrolünü göster</system:String>
+
+    <system:String x:Key="Lang_AboutTitle">Hakkında</system:String>
+    <system:String x:Key="Lang_AboutDesc">Windows medya oturumlarını ve sistem ses/parlaklık kontrollerini zarif bir şekilde yöneten açık kaynaklı gösterge paneli uygulaması.</system:String>
+    <system:String x:Key="Lang_GitHubProjectPage">GitHub Proje Sayfası</system:String>
+    <system:String x:Key="Lang_ReportBugsTitle">Hataları Bize Bildirin</system:String>
+    <system:String x:Key="Lang_ReportBugsDesc">Uygulamayı kullanırken can sıkıcı bir hatayla mı karşılaştınız veya harika bir özellik fikriniz mi var? Geliştirmemize yardımcı olmak için lütfen GitHub üzerinden bir kayıt oluşturun.</system:String>
+    <system:String x:Key="Lang_ReportBugsButton">Hata Bildir</system:String>
+    <system:String x:Key="Lang_LanguageTurkish">Türkçe</system:String>
+    <system:String x:Key="Lang_LanguageEnglish">İngilizce</system:String>
+
+    <system:String x:Key="Lang_ToolTipPin">Paneli Ekrana Sabitle</system:String>
+    <system:String x:Key="Lang_ToolTipSettings">Ayarlar Panelini Aç</system:String>
+    <system:String x:Key="Lang_ToolTipHide">Paneli Gizle</system:String>
+
+</ResourceDictionary>

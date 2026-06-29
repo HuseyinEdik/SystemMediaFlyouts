@@ -36,5 +36,8 @@ namespace SystemMediaFlyouts.Models
 
         // Panel ölçeklendirme ayarı (1.0 = %100, 1.5 = %150, vb.)
         public double PanelScale { get; set; } = 1.0;
+
+        // Dil Ayarı
+        public string Language { get; set; } = "tr-TR";
     }
 }

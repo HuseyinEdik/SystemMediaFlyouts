@@ -9,7 +9,7 @@
             <ui:Button Command="{Binding TogglePinCommand}" 
                        Appearance="Transparent" 
                        Padding="6" Margin="0,0,2,0"
-                       ToolTip="Paneli Ekrana Sabitle">
+                       ToolTip="{DynamicResource Lang_ToolTipPin}">
                 <ui:SymbolIcon Symbol="Pin24">
                     <ui:SymbolIcon.Style>
                         <Style TargetType="ui:SymbolIcon">
@@ -41,13 +41,13 @@
                        Icon="{ui:SymbolIcon Settings24}" 
                        Appearance="Transparent" 
                        Padding="6" Margin="0,0,2,0"
-                       ToolTip="Ayarlar Panelini Aç"/>
+                       ToolTip="{DynamicResource Lang_ToolTipSettings}"/>
 
             <ui:Button Command="{Binding HidePanelCommand}" 
                        Icon="{ui:SymbolIcon Dismiss24}" 
                        Appearance="Transparent" 
                        Padding="6"
-                       ToolTip="Paneli Gizle"/>
+                       ToolTip="{DynamicResource Lang_ToolTipHide}"/>
 
         </StackPanel>
     </Grid>

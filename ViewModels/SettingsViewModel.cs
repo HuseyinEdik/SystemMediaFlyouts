@@ -1,12 +1,14 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection;
 using SystemMediaFlyouts.Models;
 using SystemMediaFlyouts.Services;
-using System.Reflection;
-using Microsoft.Win32;
+using Windows.Globalization;
 
 namespace SystemMediaFlyouts.ViewModels
 {
@@ -14,17 +16,87 @@ namespace SystemMediaFlyouts.ViewModels
     {
         private readonly SettingsService _settingsService;
         private bool _isInitializing = true;
+        private bool _isApplyingLanguage;
+        private string _appliedLanguage = "tr-TR";
 
-        // ----- YENİ EKLENEN SAYFA VE MENÜ YÖNETİMİ -----
+        // Değişkenler
         [ObservableProperty]
         private string _currentPage = "General"; // Varsayılan açılış sayfası
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _isRunAtStartupEnabled;  // Başlangıçta çalıştırma ayarı
-        [ObservableProperty] 
+        [ObservableProperty]
         private double _panelScale; // Panel ölçeklendirme ayarı 
+        [ObservableProperty]
+        private string _language; // Dil ayarı
+
+        [ObservableProperty] private AppTheme _theme;                       // Tema ayarı
+        [ObservableProperty] private FlyoutPosition _position;              // Panel konumu
+        [ObservableProperty] private bool _isControlBarEnabled;             // Kontrol çubuğu görünürlüğü
+        [ObservableProperty] private bool _isMediaModuleEnabled;            // Medya modülü ayarı
+        [ObservableProperty] private bool _isVolumeModuleEnabled;           // Ses modülü ayarı
+        [ObservableProperty] private bool _isBrightnessModuleEnabled;       // Parlaklık modülü ayarı
+
+        private readonly ObservableCollection<LocalizedOption<AppTheme>> _availableThemes = new();
+        private readonly ObservableCollection<LocalizedOption<FlyoutPosition>> _availablePositions = new();
+
+        public ObservableCollection<LocalizedOption<AppTheme>> AvailableThemes => _availableThemes;
+        public ObservableCollection<LocalizedOption<FlyoutPosition>> AvailablePositions => _availablePositions;
+
+        // Dil listesi her zaman o dilin kendi orijinal adıyla kalmalı (Dinamik çeviri yapılmaz)
+        public Dictionary<string, string> AvailableLanguages { get; } = new()
+        {
+            { "tr-TR", "Türkçe" },
+            { "en-US", "English" }
+        };
+
+        private static string NormalizeCultureCode(string? cultureCode)
+        {
+            return string.Equals(cultureCode, "en-US", StringComparison.OrdinalIgnoreCase)
+                ? "en-US"
+                : "tr-TR";
+        }
 
         // Otomatik sürüm numarasını çeken özellik
         public string AppVersion => $"Versiyon {Assembly.GetExecutingAssembly().GetName().Version}";
+
+        private static string GetLocalizedString(string key, string fallback) =>
+            System.Windows.Application.Current?.TryFindResource(key) as string ?? fallback;
+
+        private void InitializeLocalizedOptions()
+        {
+            if (_availableThemes.Count == 0)
+            {
+                _availableThemes.Add(new LocalizedOption<AppTheme>(AppTheme.System, string.Empty));
+                _availableThemes.Add(new LocalizedOption<AppTheme>(AppTheme.Light, string.Empty));
+                _availableThemes.Add(new LocalizedOption<AppTheme>(AppTheme.Dark, string.Empty));
+            }
+
+            if (_availablePositions.Count == 0)
+            {
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.TopLeft, string.Empty));
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.TopCenter, string.Empty));
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.TopRight, string.Empty));
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.BottomLeft, string.Empty));
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.BottomCenter, string.Empty));
+                _availablePositions.Add(new LocalizedOption<FlyoutPosition>(FlyoutPosition.BottomRight, string.Empty));
+            }
+        }
+
+        private void RefreshLocalizedOptions()
+        {
+            InitializeLocalizedOptions();
+
+            _availableThemes[0].DisplayName = GetLocalizedString("Lang_ThemeSystem", "System Theme");
+            _availableThemes[1].DisplayName = GetLocalizedString("Lang_ThemeLight", "Light Theme");
+            _availableThemes[2].DisplayName = GetLocalizedString("Lang_ThemeDark", "Dark Theme");
+
+            _availablePositions[0].DisplayName = GetLocalizedString("Lang_PosTopLeft", "Top Left");
+            _availablePositions[1].DisplayName = GetLocalizedString("Lang_PosTopCenter", "Top Center");
+            _availablePositions[2].DisplayName = GetLocalizedString("Lang_PosTopRight", "Top Right");
+            _availablePositions[3].DisplayName = GetLocalizedString("Lang_PosBottomLeft", "Bottom Left");
+            _availablePositions[4].DisplayName = GetLocalizedString("Lang_PosBottomCenter", "Bottom Center");
+            _availablePositions[5].DisplayName = GetLocalizedString("Lang_PosBottomRight", "Bottom Right");
+        }
 
         [RelayCommand]
         private void Navigate(string pageName)
@@ -61,31 +133,8 @@ namespace SystemMediaFlyouts.ViewModels
             }
             catch { }
         }
-        // -----------------------------------------------
 
-        public Dictionary<AppTheme, string> AvailableThemes { get; } = new Dictionary<AppTheme, string>
-        {
-            { AppTheme.System, "Sistem Teması" },
-            { AppTheme.Light, "Açık Tema" },
-            { AppTheme.Dark, "Koyu Tema" }
-        };
 
-        public Dictionary<FlyoutPosition, string> AvailablePositions { get; } = new Dictionary<FlyoutPosition, string>
-        {
-            { FlyoutPosition.TopLeft, "Sol Üst" },
-            { FlyoutPosition.TopCenter, "Üst Orta" },
-            { FlyoutPosition.TopRight, "Sağ Üst" },
-            { FlyoutPosition.BottomLeft, "Sol Alt" },
-            { FlyoutPosition.BottomCenter, "Alt Orta" },
-            { FlyoutPosition.BottomRight, "Sağ Alt" }
-        };
-
-        [ObservableProperty] private AppTheme _theme;
-        [ObservableProperty] private FlyoutPosition _position;
-        [ObservableProperty] private bool _isControlBarEnabled;
-        [ObservableProperty] private bool _isMediaModuleEnabled;
-        [ObservableProperty] private bool _isVolumeModuleEnabled;
-        [ObservableProperty] private bool _isBrightnessModuleEnabled;
 
         private int _displayDuration;
         public int DisplayDuration
@@ -107,6 +156,9 @@ namespace SystemMediaFlyouts.ViewModels
             IsBrightnessModuleEnabled = current.IsBrightnessModuleEnabled;
             DisplayDuration = current.DisplayDuration;
             PanelScale = current.PanelScale;
+            _appliedLanguage = NormalizeCultureCode(current.Language);
+            Language = _appliedLanguage;
+            RefreshLocalizedOptions();
             IsRunAtStartupEnabled = CheckStartup();
 
             _isInitializing = false;
@@ -136,6 +188,7 @@ namespace SystemMediaFlyouts.ViewModels
                 IsBrightnessModuleEnabled = IsBrightnessModuleEnabled,
                 DisplayDuration = DisplayDuration,
                 PanelScale = PanelScale,
+                Language = Language,
             };
 
             _settingsService.SaveSettings(updatedSettings);
@@ -154,14 +207,24 @@ namespace SystemMediaFlyouts.ViewModels
             try
             {
                 string appName = "SystemMediaFlyouts";
-                // Uygulamanın .exe yolunu otomatik bul
-                string appPath = Process.GetCurrentProcess().MainModule.FileName;
-                using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
 
-                if (enable)
-                    key.SetValue(appName, $"\"{appPath}\"");
-                else
-                    key.DeleteValue(appName, false);
+                // 1. DÜZELTME: MainModule null olabileceği için '?.' kullandık.
+                string? appPath = Process.GetCurrentProcess().MainModule?.FileName;
+
+                // Eğer yol bulunamazsa işlemi iptal et (Güvenlik kilidi)
+                if (string.IsNullOrEmpty(appPath)) return;
+
+                // 2. DÜZELTME: OpenSubKey null dönebileceği için RegistryKey? (soru işaretli) yaptık.
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+
+                // 3. DÜZELTME: Key'in null olmadığından emin olduktan sonra işlem yapıyoruz.
+                if (key != null)
+                {
+                    if (enable)
+                        key.SetValue(appName, $"\"{appPath}\"");
+                    else
+                        key.DeleteValue(appName, false);
+                }
             }
             catch { }
         }
@@ -172,12 +235,92 @@ namespace SystemMediaFlyouts.ViewModels
             try
             {
                 string appName = "SystemMediaFlyouts";
-                using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
                 return key?.GetValue(appName) != null;
             }
             catch
             {
                 return false;
+            }
+        }
+
+        // Kullanıcı ComboBox'tan dili değiştirdiği an tetiklenir
+        partial void OnLanguageChanged(string value)
+        {
+            if (_isInitializing || _isApplyingLanguage)
+            {
+                return;
+            }
+
+            var cultureCode = NormalizeCultureCode(value);
+            if (!ApplyLanguage(cultureCode))
+            {
+                _isApplyingLanguage = true;
+                try
+                {
+                    Language = _appliedLanguage;
+                }
+                finally
+                {
+                    _isApplyingLanguage = false;
+                }
+
+                return;
+            }
+
+            _appliedLanguage = cultureCode;
+            RefreshLocalizedOptions();
+            SaveAndBroadcast();
+        }
+
+        // Eski dil dosyasını söküp yeni dil dosyasını XAML motoruna enjekte eden metot
+        public static bool ApplyLanguage(string cultureCode)
+        {
+            var normalizedCulture = NormalizeCultureCode(cultureCode);
+
+            try
+            {
+                var dictionaries = System.Windows.Application.Current.Resources.MergedDictionaries;
+                var newDictionary = new System.Windows.ResourceDictionary
+                {
+                    Source = new Uri($"pack://application:,,,/Languages/StringResources.{normalizedCulture}.xaml", UriKind.Absolute)
+                };
+
+                // Mevcut yüklü olan dil dosyasını bul (İçinde 'Languages/StringResources' geçen)
+                var langDict = dictionaries.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("/Languages/StringResources."));
+
+                if (langDict != null)
+                {
+                    dictionaries.Remove(langDict); // Eskisini sil
+                }
+
+                // Yeni seçilen dili sisteme ekle
+                dictionaries.Add(newDictionary);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Dil uygulanırken hata oluştu: {ex.Message}");
+                return false;
+            }
+        }
+
+        public sealed class LocalizedOption<TKey> : ObservableObject
+        {
+            private string _displayName;
+
+            public LocalizedOption(TKey key, string displayName)
+            {
+                Key = key;
+                _displayName = displayName;
+            }
+
+            public TKey Key { get; }
+
+            public string DisplayName
+            {
+                get => _displayName;
+                set => SetProperty(ref _displayName, value);
             }
         }
     }

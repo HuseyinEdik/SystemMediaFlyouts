@@ -14,7 +14,7 @@ namespace SystemMediaFlyouts.Core
         IRecipient<VolumeChangedMessage>,
         IRecipient<BrightnessChangedMessage>,
         IRecipient<MediaChangedMessage>,
-        IRecipient<SettingsOpenedMessage> // YENİ EKLENDİ
+        IRecipient<SettingsOpenedMessage> 
     {
         private Window? _flyoutWindow;
         private readonly DispatcherTimer _hideTimer;

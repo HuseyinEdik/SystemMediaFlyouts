@@ -1,0 +1,65 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="Lang_AppName">System Media Flyouts</system:String>
+    <system:String x:Key="Lang_SettingsWindowTitle">System Media Flyouts Settings</system:String>
+    <system:String x:Key="Lang_MenuHeader">Settings</system:String>
+
+    <system:String x:Key="Lang_MenuGeneral">General</system:String>
+    <system:String x:Key="Lang_MenuAppearance">Appearance</system:String>
+    <system:String x:Key="Lang_MenuVisibility">Module Visibility</system:String>
+    <system:String x:Key="Lang_MenuAbout">About</system:String>
+    <system:String x:Key="Lang_MenuExit">Exit</system:String>
+
+    <system:String x:Key="Lang_GeneralTitle">General Settings</system:String>
+    <system:String x:Key="Lang_SystemSection">System</system:String>
+    <system:String x:Key="Lang_RunAtStartup">Run at Startup</system:String>
+    <system:String x:Key="Lang_RunAtStartupDesc">Launch the application automatically when Windows starts</system:String>
+    <system:String x:Key="Lang_AppLanguage">Application Language</system:String>
+    <system:String x:Key="Lang_AppLanguageDesc">Select application language</system:String>
+    <system:String x:Key="Lang_PanelPosition">Panel Position</system:String>
+    <system:String x:Key="Lang_PanelPositionDesc">Determine the corner of the screen where the panel appears.</system:String>
+
+    <system:String x:Key="Lang_AppearanceTitle">Appearance and Position</system:String>
+    <system:String x:Key="Lang_AppTheme">Application Theme</system:String>
+    <system:String x:Key="Lang_AppThemeDesc">Select Light, Dark, or System theme.</system:String>
+    <system:String x:Key="Lang_ThemeLight">Light Theme</system:String>
+    <system:String x:Key="Lang_ThemeDark">Dark Theme</system:String>
+    <system:String x:Key="Lang_ThemeSystem">System Theme</system:String>
+    <system:String x:Key="Lang_PanelScale">Panel Size</system:String>
+    <system:String x:Key="Lang_PanelScaleDesc">Adjust the overall size of the media panel</system:String>
+    <system:String x:Key="Lang_DisplayDuration">Display Duration</system:String>
+    <system:String x:Key="Lang_DisplayDurationDesc">The duration the panel stays on screen</system:String>
+    <system:String x:Key="Lang_SecondsSuffix">sec</system:String>
+
+    <system:String x:Key="Lang_VisibilityTitle">Module Visibility</system:String>
+    <system:String x:Key="Lang_ControlBarModule">Control Bar Module</system:String>
+    <system:String x:Key="Lang_ControlBarModuleDesc">Show pin, settings, and close buttons at the top of the panel</system:String>
+    <system:String x:Key="Lang_PosTopLeft">Top Left</system:String>
+    <system:String x:Key="Lang_PosTopCenter">Top Center</system:String>
+    <system:String x:Key="Lang_PosTopRight">Top Right</system:String>
+    <system:String x:Key="Lang_PosBottomLeft">Bottom Left</system:String>
+    <system:String x:Key="Lang_PosBottomCenter">Bottom Center</system:String>
+    <system:String x:Key="Lang_PosBottomRight">Bottom Right</system:String>
+    <system:String x:Key="Lang_MediaModule">Media Module</system:String>
+    <system:String x:Key="Lang_MediaModuleDesc">Show track information and media controls</system:String>
+    <system:String x:Key="Lang_VolumeModule">Volume Module</system:String>
+    <system:String x:Key="Lang_VolumeModuleDesc">Show system volume level control</system:String>
+    <system:String x:Key="Lang_BrightnessModule">Brightness Module</system:String>
+    <system:String x:Key="Lang_BrightnessModuleDesc">Show screen brightness control</system:String>
+
+    <system:String x:Key="Lang_AboutTitle">About</system:String>
+    <system:String x:Key="Lang_AboutDesc">An open-source flyout panel application that elegantly manages Windows media sessions and system volume/brightness controls.</system:String>
+    <system:String x:Key="Lang_GitHubProjectPage">GitHub Project Page</system:String>
+    <system:String x:Key="Lang_ReportBugsTitle">Report Bugs to Us</system:String>
+    <system:String x:Key="Lang_ReportBugsDesc">Did you encounter an annoying bug or have a great feature idea while using the app? Please create an issue on GitHub to help us improve.</system:String>
+    <system:String x:Key="Lang_ReportBugsButton">Report Bug</system:String>
+    <system:String x:Key="Lang_LanguageTurkish">Turkish</system:String>
+    <system:String x:Key="Lang_LanguageEnglish">English</system:String>
+
+    <system:String x:Key="Lang_ToolTipPin">Pin Panel to Screen</system:String>
+    <system:String x:Key="Lang_ToolTipSettings">Open Settings Panel</system:String>
+    <system:String x:Key="Lang_ToolTipHide">Hide Panel</system:String>
+
+</ResourceDictionary>
