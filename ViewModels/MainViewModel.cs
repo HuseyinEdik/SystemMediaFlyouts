@@ -40,9 +40,10 @@ namespace SystemMediaFlyouts.ViewModels
         [ObservableProperty] private int _currentBrightness;
         [ObservableProperty] private string _mediaTitle = "Bekleniyor...";
         [ObservableProperty] private string _mediaArtist = "-";
-        [ObservableProperty] private bool _isMediaPlaying;
-        [ObservableProperty] private BitmapImage? _mediaThumbnail;
+        [ObservableProperty] private bool _isMediaPlaying; 
+        [ObservableProperty] private BitmapImage? _mediaThumbnail; 
         [ObservableProperty] private double _mediaProgress; // Zaman çizgisi için
+        [ObservableProperty] private double _panelScale; // Panel ölçeklendirme
 
         public MainViewModel(SettingsService settingsService, HardwareService hardwareService)
         {
@@ -54,6 +55,7 @@ namespace SystemMediaFlyouts.ViewModels
             IsMediaModuleEnabled = initialSettings.IsMediaModuleEnabled;
             IsVolumeModuleEnabled = initialSettings.IsVolumeModuleEnabled;
             IsBrightnessModuleEnabled = initialSettings.IsBrightnessModuleEnabled;
+            PanelScale = initialSettings.PanelScale;
 
             WeakReferenceMessenger.Default.RegisterAll(this);
 
@@ -97,7 +99,6 @@ namespace SystemMediaFlyouts.ViewModels
         }
 
         // --- GÜNCELLENEN AYARLARI AÇ KOMUTU ---
-        // --- 2. AYARLARI AÇ KOMUTU ---
         [RelayCommand]
         private void OpenSettings()
         {
@@ -152,6 +153,7 @@ namespace SystemMediaFlyouts.ViewModels
                 IsMediaModuleEnabled = message.Value.IsMediaModuleEnabled;
                 IsVolumeModuleEnabled = message.Value.IsVolumeModuleEnabled;
                 IsBrightnessModuleEnabled = message.Value.IsBrightnessModuleEnabled;
+                PanelScale = message.Value.PanelScale;
             });
         }
 

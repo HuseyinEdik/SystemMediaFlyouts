@@ -33,5 +33,8 @@ namespace SystemMediaFlyouts.Models
 
         // Panelin ekranda kalacağı süre (saniye cinsinden)
         public int DisplayDuration { get; set; } = 3;
+
+        // Panel ölçeklendirme ayarı (1.0 = %100, 1.5 = %150, vb.)
+        public double PanelScale { get; set; } = 1.0;
     }
 }

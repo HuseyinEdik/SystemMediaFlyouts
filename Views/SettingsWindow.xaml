@@ -38,7 +38,7 @@
                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,5"
                                    Appearance="Transparent"/>
 
-                        <ui:Button Content="Görünüm ve Konum"
+                        <ui:Button Content="Görünüm"
                                    Command="{Binding NavigateCommand}" CommandParameter="Appearance"
                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,5"
                                    Appearance="Transparent"/>
@@ -86,6 +86,20 @@
                             </ui:CardControl.Header>
                             <ui:ToggleSwitch IsChecked="{Binding IsRunAtStartupEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </ui:CardControl>
+
+                        <ui:CardControl Margin="0,0,0,8">
+                            <ui:CardControl.Header>
+                                <StackPanel>
+                                    <TextBlock Text="Panel Konumu" FontWeight="Medium"/>
+                                    <TextBlock Text="Gösterge panelinin ekranda çıkacağı köşeyi belirleyin." FontSize="12" Opacity="0.7"/>
+                                </StackPanel>
+                            </ui:CardControl.Header>
+                            <ComboBox ItemsSource="{Binding AvailablePositions}" 
+                                      DisplayMemberPath="Value" 
+                                      SelectedValuePath="Key" 
+                                      SelectedValue="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                      Width="150"/>
+                        </ui:CardControl>
                     </StackPanel>
 
                     <StackPanel>
@@ -100,8 +114,8 @@
                             </Style>
                         </StackPanel.Style>
 
-                        <TextBlock Text="Görünüm ve Konum" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
-
+                        <TextBlock Text="Görünüm" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                        
                         <ui:CardControl Margin="0,0,0,8">
                             <ui:CardControl.Header>
                                 <StackPanel>
@@ -119,15 +133,29 @@
                         <ui:CardControl Margin="0,0,0,8">
                             <ui:CardControl.Header>
                                 <StackPanel>
-                                    <TextBlock Text="Panel Konumu" FontWeight="Medium"/>
-                                    <TextBlock Text="Gösterge panelinin ekranda çıkacağı köşeyi belirleyin." FontSize="12" Opacity="0.7"/>
+                                    <TextBlock Text="Panel Boyutu" FontWeight="Medium"/>
+                                    <TextBlock Text="Medya panelinin genel büyüklüğünü ayarla" FontSize="12" Opacity="0.7"/>
                                 </StackPanel>
                             </ui:CardControl.Header>
-                            <ComboBox ItemsSource="{Binding AvailablePositions}" 
-                                      DisplayMemberPath="Value" 
-                                      SelectedValuePath="Key" 
-                                      SelectedValue="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                      Width="150"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Slider Width="150" 
+                                        Minimum="0.50" 
+                                        Maximum="1.50" 
+                                        TickFrequency="0.05"
+                                        IsSnapToTickEnabled="True"
+                                        IsMoveToPointEnabled="True" 
+                                        Value="{Binding PanelScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"/>
+
+                                <TextBlock Text="{Binding PanelScale, StringFormat={}{0:P0}}" 
+                                           Width="40" 
+                                           TextAlignment="Right" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+                            </StackPanel>
                         </ui:CardControl>
 
                         <ui:CardControl Margin="0,0,0,8">
@@ -137,10 +165,22 @@
                                     <TextBlock Text="Panelin ekranda kalacağı süre (saniye)" FontSize="12" Opacity="0.7"/>
                                 </StackPanel>
                             </ui:CardControl.Header>
+
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Slider Minimum="1" Maximum="10" Value="{Binding DisplayDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBlock Text="{Binding DisplayDuration}" VerticalAlignment="Center" FontWeight="SemiBold" Width="15"/>
-                                <TextBlock Text="sn" VerticalAlignment="Center" Opacity="0.7"/>
+                                <Slider Width="150" 
+                                        Minimum="1" 
+                                        Maximum="10" 
+                                        IsMoveToPointEnabled="True"
+                                        Value="{Binding DisplayDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"/>
+
+                                <TextBlock Text="{Binding DisplayDuration, StringFormat={}{0} sn}" 
+                                           Width="40" 
+                                           TextAlignment="Right"
+                                           VerticalAlignment="Center" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
                             </StackPanel>
                         </ui:CardControl>
                     </StackPanel>

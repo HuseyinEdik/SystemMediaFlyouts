@@ -19,11 +19,15 @@ namespace SystemMediaFlyouts.Core
         private Window? _flyoutWindow;
         private readonly DispatcherTimer _hideTimer;
         private int _displayDuration;
+        private FlyoutPosition _currentPosition;
 
         // Kurucu metot: Başlangıçta ayarları alıp zamanlayıcıyı hazırlarız
         public WindowManager(SettingsService settingsService)
         {
             _displayDuration = settingsService.CurrentSettings.DisplayDuration;
+
+            // Başlangıç konumunu hafızaya alıyoruz
+            _currentPosition = settingsService.CurrentSettings.Position;
 
             _hideTimer = new DispatcherTimer();
             _hideTimer.Tick += OnHideTimerTick;
@@ -33,8 +37,17 @@ namespace SystemMediaFlyouts.Core
         {
             _flyoutWindow = window;
 
+            _flyoutWindow.SizeChanged += OnWindowSizeChanged;
+
             // Tüm mesajları dinlemesi için RegisterAll kullanıyoruz
             WeakReferenceMessenger.Default.RegisterAll(this);
+        }
+
+        // Boyut değiştiği an (Modüller gizlenip açıldığında) burası tetiklenir
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Yeni Width ve Height değerlerine göre konumu milisaniyeler içinde yeniden hesaplar
+            UpdateWindowPosition(_currentPosition);
         }
 
         // --- GİZLEME MANTIĞI ---
@@ -100,6 +113,9 @@ namespace SystemMediaFlyouts.Core
             // Süre ayarı değişmiş olabilir, onu güncelliyoruz
             _displayDuration = message.Value.DisplayDuration;
 
+            // Kullanıcı ayarlardan köşeyi değiştirdiyse hafızayı güncelle
+            _currentPosition = message.Value.Position;
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 UpdateWindowPosition(message.Value.Position);
@@ -109,7 +125,7 @@ namespace SystemMediaFlyouts.Core
             ShowPanel();
         }
 
-        // --- TEMA VE KONUM METOTLARI (Senin Kodların) ---
+        // --- TEMA VE KONUM METOTLARI ---
         public void UpdateTheme(AppTheme theme)
         {
             if (theme == AppTheme.System)
@@ -129,9 +145,14 @@ namespace SystemMediaFlyouts.Core
         {
             if (_flyoutWindow == null) return;
 
+            // EN ÖNEMLİ DEĞİŞİKLİK: Width ve Height yerine ActualWidth ve ActualHeight kullanıyoruz!
+            double windowWidth = _flyoutWindow.ActualWidth;
+            double windowHeight = _flyoutWindow.ActualHeight;
+
+            // Pencere daha ilk salisede tam çizilmediyse veya boyutu 0 ise matematiği beklet (Hatalı köşeye gitmesini engeller)
+            if (windowWidth == 0 || windowHeight == 0) return;
+
             var workArea = SystemParameters.WorkArea;
-            double windowWidth = _flyoutWindow.Width;
-            double windowHeight = _flyoutWindow.Height;
             double padding = 24;
 
             switch (position)

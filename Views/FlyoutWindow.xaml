@@ -8,21 +8,27 @@
         Background="Transparent"
         ShowInTaskbar="False"
         Topmost="True"
-        SizeToContent="Height"
-        Width="320">
+        SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
-    <Border CornerRadius="12" 
+    <Border Width="320"
+            CornerRadius="12" 
             Background="{ui:ThemeResource ApplicationBackgroundBrush}" 
             BorderBrush="{ui:ThemeResource ControlElevationBorderBrush}" 
             BorderThickness="1" 
-            Padding="20,15,20,20"> 
+            Padding="20,15,20,20">
+
+        <Border.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding PanelScale}" ScaleY="{Binding PanelScale}" />
+        </Border.LayoutTransform>
+
         <StackPanel>
             <local:ControlBarUserControl DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}" 
-                             Visibility="{Binding IsControlBarEnabled, Converter={StaticResource BoolToVis}}" />
+                                         Visibility="{Binding IsControlBarEnabled, Converter={StaticResource BoolToVis}}" />
+
             <local:MediaUserControl Visibility="{Binding IsMediaModuleEnabled, Converter={StaticResource BoolToVis}}" />
             <local:VolumeUserControl Visibility="{Binding IsVolumeModuleEnabled, Converter={StaticResource BoolToVis}}" />
             <local:BrightnessUserControl Visibility="{Binding IsBrightnessModuleEnabled, Converter={StaticResource BoolToVis}}" />

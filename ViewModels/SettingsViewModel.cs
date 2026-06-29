@@ -20,6 +20,8 @@ namespace SystemMediaFlyouts.ViewModels
         private string _currentPage = "General"; // Varsayılan açılış sayfası
         [ObservableProperty] 
         private bool _isRunAtStartupEnabled;  // Başlangıçta çalıştırma ayarı
+        [ObservableProperty] 
+        private double _panelScale; // Panel ölçeklendirme ayarı 
 
         // Otomatik sürüm numarasını çeken özellik
         public string AppVersion => $"Versiyon {Assembly.GetExecutingAssembly().GetName().Version}";
@@ -104,6 +106,7 @@ namespace SystemMediaFlyouts.ViewModels
             IsVolumeModuleEnabled = current.IsVolumeModuleEnabled;
             IsBrightnessModuleEnabled = current.IsBrightnessModuleEnabled;
             DisplayDuration = current.DisplayDuration;
+            PanelScale = current.PanelScale;
             IsRunAtStartupEnabled = CheckStartup();
 
             _isInitializing = false;
@@ -115,6 +118,7 @@ namespace SystemMediaFlyouts.ViewModels
         partial void OnIsMediaModuleEnabledChanged(bool value) => SaveAndBroadcast();
         partial void OnIsVolumeModuleEnabledChanged(bool value) => SaveAndBroadcast();
         partial void OnIsBrightnessModuleEnabledChanged(bool value) => SaveAndBroadcast();
+        partial void OnPanelScaleChanged(double value) => SaveAndBroadcast();
 
 
 
@@ -130,7 +134,8 @@ namespace SystemMediaFlyouts.ViewModels
                 IsMediaModuleEnabled = IsMediaModuleEnabled,
                 IsVolumeModuleEnabled = IsVolumeModuleEnabled,
                 IsBrightnessModuleEnabled = IsBrightnessModuleEnabled,
-                DisplayDuration = DisplayDuration
+                DisplayDuration = DisplayDuration,
+                PanelScale = PanelScale,
             };
 
             _settingsService.SaveSettings(updatedSettings);
