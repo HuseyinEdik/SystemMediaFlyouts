@@ -10,7 +10,12 @@
 	<AssemblyVersion>1.0.0</AssemblyVersion>
 	<FileVersion>1.0.0</FileVersion>
 	<Version>1.0.0</Version>
+	<ApplicationIcon>Assets\systemmediaflyoutsicon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\systemmediaflyoutsicon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
@@ -19,6 +24,14 @@
     <PackageReference Include="System.Management" Version="10.0.9" />
     <PackageReference Include="wpf-ui" Version="4.3.0" />
 	<Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\systemmediaflyoutsicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\systemmediaflyoutsicon.ico" />
   </ItemGroup>
 
 </Project>

@@ -94,11 +94,30 @@ namespace SystemMediaFlyouts
             // 2. TRAY (SİSTEM TEPSİSİ) İKONUNU OLUŞTUR
             _notifyIcon = new System.Windows.Forms.NotifyIcon
             {
-                // Dışarıdan resim istemez, uygulamanın kendi exe ikonunu otomatik çeker
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 Visible = true,
                 Text = GetLocalizedString("Lang_AppName", "System Media Flyouts")
             };
+
+            // İkonu .exe'den tahmine dayalı çekmek yerine, doğrudan projenin içindeki Assets klasöründen okuyoruz
+            try
+            {
+                var iconUri = new Uri("pack://application:,,,/Assets/systemmediaflyoutsicon.ico", UriKind.Absolute);
+                var iconStream = System.Windows.Application.GetResourceStream(iconUri)?.Stream;
+
+                if (iconStream != null)
+                {
+                    _notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                }
+                else
+                {
+                    // Emniyet sübabı: Dosya okunamazsa mecburen eskiye döner
+                    _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                }
+            }
+            catch
+            {
+                _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            }
 
             // Çift tıklayınca ayarları aç
             _notifyIcon.DoubleClick += (s, args) =>
