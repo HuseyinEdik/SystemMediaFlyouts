@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
+using System.Threading; // 1. EKLENEN: Mutex için gerekli kütüphane
 using System.Windows;
 using SystemMediaFlyouts.Core;
 using SystemMediaFlyouts.Messages;
@@ -16,6 +17,7 @@ namespace SystemMediaFlyouts
     public partial class App : Application
     {
         // 1. DEĞİŞKENLER BURADA OLMALI (Metotların dışında, sınıfın hemen içinde)
+        private static Mutex? _mutex; // 2. EKLENEN: Mutex değişkeni (Garbage Collector silmesin diye static yapıyoruz)
         private System.Windows.Forms.NotifyIcon? _notifyIcon;
         private Views.SettingsWindow? _settingsWindow;
         public new static App Current => (App)Application.Current;
@@ -57,6 +59,21 @@ namespace SystemMediaFlyouts
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            // 3. EKLENEN: MUTEX KİLİT KONTROLÜ
+            // Bu işlemi tüm pencere ve servislerden ÖNCE yapıyoruz ki uygulama çalışıyorsa anında kapansın.
+            const string appName = "SystemMediaFlyouts_SingleInstance_Mutex";
+            _mutex = new Mutex(true, appName, out bool createdNew);
+
+            if (!createdNew)
+            {
+                // Eğer createdNew false döndüyse, bu kilidi zaten başka bir kopya tutuyor demektir.
+                // Mevcut açılmaya çalışan bu kopyayı anında ve sessizce sonlandırıyoruz.
+                Current.Shutdown();
+                return;
+            }
+
+            // --- KİLİT BİZDEYSE (İLK AÇILIŞSA) NORMAL ÇALIŞMAYA DEVAM ET ---
+
             base.OnStartup(e);
             // Pencere gizlendiğinde uygulamanın kapanmasını engeller. Sadece Tray İkonundan "Çıkış" denilince kapanır.
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -139,8 +156,5 @@ namespace SystemMediaFlyouts
             // Uygulama açıldığında paneli bir kez göster ki ilk durumda görünür olsun
             windowManager.Receive(new SettingsOpenedMessage());
         }
-
-    
     }
-
 }

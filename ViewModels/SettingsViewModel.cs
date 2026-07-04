@@ -5,10 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using SystemMediaFlyouts.Models;
 using SystemMediaFlyouts.Services;
 using Windows.Globalization;
+using IWshRuntimeLibrary;
+using System.IO;
 
 namespace SystemMediaFlyouts.ViewModels
 {
@@ -201,42 +204,53 @@ namespace SystemMediaFlyouts.ViewModels
             SetStartup(value);
         }
 
-        // Windows Kayıt Defterine uygulamayı ekleyen/çıkaran metot
+        // Windows Başlangıç Klasörüne kısayol ekleyen KESİN ve GÜVENLİ metot
         private void SetStartup(bool enable)
         {
             try
             {
-                string appName = "SystemMediaFlyouts";
+                string startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                string shortcutPath = Path.Combine(startupPath, "SystemMediaFlyouts.lnk");
 
-                // 1. DÜZELTME: MainModule null olabileceği için '?.' kullandık.
-                string? appPath = Process.GetCurrentProcess().MainModule?.FileName;
-
-                // Eğer yol bulunamazsa işlemi iptal et (Güvenlik kilidi)
-                if (string.IsNullOrEmpty(appPath)) return;
-
-                // 2. DÜZELTME: OpenSubKey null dönebileceği için RegistryKey? (soru işaretli) yaptık.
-                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-
-                // 3. DÜZELTME: Key'in null olmadığından emin olduktan sonra işlem yapıyoruz.
-                if (key != null)
+                if (enable)
                 {
-                    if (enable)
-                        key.SetValue(appName, $"\"{appPath}\"");
-                    else
-                        key.DeleteValue(appName, false);
+                    string? appPath = Environment.ProcessPath;
+                    if (string.IsNullOrEmpty(appPath)) return;
+
+                    // Kütüphaneyi doğrudan kullanarak %100 garantili kısayol oluşturma
+                    WshShell shell = new WshShell();
+                    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+                    shortcut.TargetPath = appPath;
+
+                    // Çalışma dizinini belirlemek, uygulamanın doğru klasörden uyanması için çok kritiktir
+                    shortcut.WorkingDirectory = Path.GetDirectoryName(appPath);
+
+                    shortcut.Save();
+                }
+                else
+                {
+                    // Ayar kapatıldıysa kısayolu siliyoruz
+                    if (System.IO.File.Exists(shortcutPath))
+                    {
+                        System.IO.File.Delete(shortcutPath);
+                    }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Başlangıç ayarı değiştirilemedi:\n{ex.Message}", "Sistem Hatası", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
         }
 
-        // Başlangıçta ayarın açık olup olmadığını denetleyen metot
+        // Başlangıçta ayarın açık olup olmadığını kısayol dosyasına bakarak denetleyen metot
         private bool CheckStartup()
         {
             try
             {
-                string appName = "SystemMediaFlyouts";
-                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
-                return key?.GetValue(appName) != null;
+                string startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                string shortcutPath = Path.Combine(startupPath, "SystemMediaFlyouts.lnk");
+
+                return System.IO.File.Exists(shortcutPath);
             }
             catch
             {

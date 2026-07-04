@@ -7,9 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
-	<AssemblyVersion>1.0.0</AssemblyVersion>
-	<FileVersion>1.0.0</FileVersion>
-	<Version>1.0.0</Version>
+	<AssemblyVersion>2.0.1</AssemblyVersion>
+	<FileVersion>2.0.1</FileVersion>
+	<Version>2.0.1</Version>
 	<ApplicationIcon>Assets\systemmediaflyoutsicon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -24,6 +24,18 @@
     <PackageReference Include="System.Management" Version="10.0.9" />
     <PackageReference Include="wpf-ui" Version="4.3.0" />
 	<Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
